@@ -102,3 +102,7 @@ AI 코딩 도구를 위한 지침 파일을 어떻게 설계하고, 범위를 �
 제품 문법과 공개 사례 조사 기준일은 2026-09-30이다.
 
 제품별 syntax와 loading semantics는 빠르게 바뀌므로 실제 적용 시 공식 문서를 다시 확인한다.
+
+## 공통 독서판
+
+[공통 디자인 2026.10.04-preview.1 발행 파일](https://github.com/dhrod5457/ai-instruction-engineering-book/releases/tag/2026.10.04-preview.1) · [독서판 제작·검증 규칙](publication/common-reading/README.md). 기존 원고와 검토 상태를 보존한 새 디자인 판입니다.
