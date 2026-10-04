@@ -101,6 +101,8 @@ pstack의 실제 작성 규칙은 반복되는 자연어 지시를 계속 추가
 - [28-bad-good-refactoring-casebook.md](28-bad-good-refactoring-casebook.md): root bloat·broad trigger·state collision·stale CLI 등 bad→good composite 사례
 - [29-structural-validator-spec.md](29-structural-validator-spec.md): structural validator가 검사할 것과 semantic eval로 넘길 것의 경계
 - [30-instruction-review-checklist.md](30-instruction-review-checklist.md): CLAUDE/AGENTS/Rule/Skill/Hook 유형별 실전 리뷰 체크리스트
+- [31-product-edge-source-deep-dive.md](31-product-edge-source-deep-dive.md): Claude prompt-audit, Cursor Rule validation, Codex skill-creator, Gemini authoring, Copilot precedence 엣지 사례
+- [32-link-only-source-audit.md](32-link-only-source-audit.md): 전체 연구 문서의 link-only source 전수 감사, historical/current/experiment-only 재분류
 - [../experiments/trigger-routing/v0.1/README.md](../experiments/trigger-routing/v0.1/README.md): trigger routing calibration pilot fixture
 - [../experiments/trigger-routing/v0.1/RUNBOOK.md](../experiments/trigger-routing/v0.1/RUNBOOK.md): host별 trigger pilot 실행 절차
 

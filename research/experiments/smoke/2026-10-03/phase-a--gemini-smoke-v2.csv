@@ -1,0 +1,4 @@
+experiment_version,date,host,host_version,model,model_version,variant,prompt_id,run_index,expected,actual,observable,routing_evidence,metadata_tokens,input_tokens,output_tokens,latency_ms,skill_body_loaded,notes
+0.1,2026-10-03,gemini,0.38.2,host-default,,A1_concise,EP-F01,1,feature,unobservable,false,host-did-not-complete,,,,5763,false,host-exit=1
+0.1,2026-10-03,gemini,0.38.2,host-default,,A1_concise,EP-B01,1,bugfix,unobservable,false,host-did-not-complete,,,,5034,false,host-exit=1
+0.1,2026-10-03,gemini,0.38.2,host-default,,A1_concise,NO-04,1,none,unobservable,false,host-did-not-complete,,,,3700,false,host-exit=1

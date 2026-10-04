@@ -1,0 +1,4 @@
+experiment_version,date,host,host_version,model,model_version,variant,prompt_id,run_index,expected,actual,observable,routing_evidence,metadata_tokens,input_tokens,output_tokens,latency_ms,skill_body_loaded,notes
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,,A1_concise,EP-F01,1,feature,feature,true,sentinel:feature,,,,14563,true,
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,,A1_concise,EP-B01,1,bugfix,bugfix,true,sentinel:bugfix,,,,13664,true,
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,,A1_concise,NO-04,1,none,unobservable,false,no-reliable-activation-evidence,,,,8614,false,

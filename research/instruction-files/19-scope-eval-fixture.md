@@ -624,16 +624,43 @@ Path scoped:
 
 # 18. 현재 상태
 
-이 fixture는 아직 실행 결과가 없다.
+2026-10-03 기준 **S0/S1 calibration fixture 구현 완료, host run 미실행** 상태다.
 
-다음 단계:
+구현:
 
-1. host-neutral baseline 파일 작성
-2. S0~S3 variant 생성
-3. deterministic grader 정의
-4. 40 task prompt 고정
-5. pilot 5~10 task 실행
-6. fixture 오류 수정
-7. 전체 반복 실행
+- `research/experiments/scope-placement/v0.1/rules.json`
+- `pilot-tasks.json`: 서로 독립적인 12개 frozen calibration task
+- `scope_harness.py`
+  - synthetic baseline materialize
+  - S0 monolithic root / S1 nested AGENTS 생성
+  - workload SHA parity
+  - changed-file scope / deterministic assertion / validation leakage grader
+- `phase_b_runner.py`
+  - Claude Code / Codex fresh synthetic workspace 실행
+  - task별 working directory 분리
+  - raw stdout/stderr + grade artifact 보존
+- GitHub Actions validation gate
+
+CI에서 확인:
+
+- fixture definition validation
+- S0/S1 workload 동일성
+- deterministic grader positive case
+- out-of-scope failure detection
+- Claude/Codex runner permission contract
+
+현재 범위는 의도적으로 S0/S1에 한정한다.
+
+S2 path-scoped vendor rule과 S3 procedure-as-Skill은 S0/S1 calibration에서 fixture/grader가 안정된 뒤 추가한다.
+
+다음 실측 순서:
+
+1. Claude Code S0/S1 × smoke 3 task
+2. Codex S0/S1 × smoke 3 task
+3. adapter/grader 수정 시 기존 smoke 폐기
+4. host별 S0/S1 × 12 task calibration
+5. 반복 실행
+6. S2 추가
+7. S3 추가
 
 pilot 중 corpus나 grader를 수정했다면 기존 결과는 버리고 새 version으로 처음부터 다시 측정한다.

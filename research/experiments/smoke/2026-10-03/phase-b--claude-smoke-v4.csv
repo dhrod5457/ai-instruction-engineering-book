@@ -1,0 +1,7 @@
+experiment_version,date,host,host_version,model,variant,task_id,task_class,run_index,agent_exit_code,latency_ms,passed,changed_file_count,out_of_scope_count,missing_validation_count,forbidden_validation_count,invariant_failure_count,assertion_failure_count,fixture_instruction_bytes,raw_dir,notes
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,S0_monolithic_root,B-01,backend,1,0,17288,true,1,0,0,0,0,0,2202,phase-b/claude-smoke-v4/runs/S0_monolithic_root__B-01__r01/raw,
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,S0_monolithic_root,F-01,frontend,1,0,52532,true,1,0,0,0,0,0,2202,phase-b/claude-smoke-v4/runs/S0_monolithic_root__F-01__r01/raw,
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,S0_monolithic_root,DOC-01,docs,1,0,36796,true,1,0,0,0,0,0,2202,phase-b/claude-smoke-v4/runs/S0_monolithic_root__DOC-01__r01/raw,
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,S1_nested_agents,B-01,backend,1,0,16364,true,1,0,0,0,0,0,2404,phase-b/claude-smoke-v4/runs/S1_nested_agents__B-01__r01/raw,
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,S1_nested_agents,F-01,frontend,1,0,48377,true,1,0,0,0,0,0,2404,phase-b/claude-smoke-v4/runs/S1_nested_agents__F-01__r01/raw,
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,S1_nested_agents,DOC-01,docs,1,0,27132,true,1,0,0,0,0,0,2404,phase-b/claude-smoke-v4/runs/S1_nested_agents__DOC-01__r01/raw,

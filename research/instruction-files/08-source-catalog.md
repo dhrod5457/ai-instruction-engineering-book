@@ -410,18 +410,63 @@ https://arxiv.org/abs/2307.03172
 - 긴 context에서 중요한 정보의 위치에 따라 활용 성능 저하 가능
 - "context가 크면 전부 넣어도 된다"는 가정의 배경 반례
 
-## H. 추가 수집할 자료
+## H. 추가 조사 상태
 
-다음은 책 집필 전 추가 조사 가치가 있다.
+2026-10-03 재점검 결과, 링크 조사로 닫을 수 있는 항목은 상세 조사했다.
 
-- Claude Code `/doctor prompt-audit` 실제 출력 사례
-- Cursor rule lint/validation 방법
+### 상세 조사 완료
+
+- Claude Code prompt-audit
+  - built-in `/doctor prompt-audit` / `/checkup prompt-audit`
+  - `/claude-api prompt-audit`
+  - model-relative audit, provenance, report + proposed diff contract 확인
+- Cursor Rule lint/validation
+  - 공식 `.mdc` structural contract와 runtime visibility 확인
+  - 공식 standalone lint/JSON Schema/CI validator는 현재 문서에서 확인하지 못함
+  - repository-owned structural validator 영역으로 분류
 - Codex skill-creator 최신 원문
-- Gemini Skill best practices 최신 원문
-- Copilot path-specific instruction의 precedence edge case
-- AGENTS.md 공개 표준의 nested semantics와 제품별 차이
-- 실제 대규모 repository의 CLAUDE.md/AGENTS.md 사례 20~30개
+  - `openai/skills`와 `openai/codex` 공식 source를 대조
+  - authoring guidance drift 자체를 canonical-source freshness 사례로 기록
+- Gemini Skill best practices
+  - discovery, progressive disclosure, degree of freedom, script ergonomics, silent-skip 조건, precedence 확인
+- Copilot path-specific instruction precedence
+  - GitHub.com/IDE의 precedence와 Copilot CLI의 merge semantics가 다름을 확인
+- AGENTS.md nested semantics와 제품별 차이
+  - 16/21번 문서와 Copilot surface 조사로 보강
+- 실제 공개 repository instruction 사례
+  - 35개 corpus 수집 및 10축 재분류 완료
+
+상세 결과:
+
+- [31-product-edge-source-deep-dive.md](31-product-edge-source-deep-dive.md)
+
+### 문서 조사로 닫지 않는 항목
+
 - 지침 파일 변경 전후 실제 coding task eval 데이터
+  - 링크 수집 backlog가 아니라 자체 실측 backlog
+  - [20-evidence-gap-matrix.md](20-evidence-gap-matrix.md)의 experiment gap으로 관리
+
+### 전체 link-only source 감사 완료
+
+- [32-link-only-source-audit.md](32-link-only-source-audit.md)에서 01~31 연구 문서와 README의 source를 전수 재검토
+- 35개 corpus raw link, commit history link, 유명/vendor repository link는 후속 분석이 존재하므로 미조사로 보지 않음
+- OpenAI `PLANS.md`, current Codex AGENTS hierarchy, Gemini extension guidance, Copilot Code Review를 추가 상세 조사
+- 핵심 source 중 URL만 남아 있어 추가 조사가 필요한 항목은 현재 없음
+
+### Historical / current 구분
+
+- OpenAI `Using PLANS.md for multi-hour problem solving`
+  - 현재 페이지가 Archived로 표시됨
+  - 현행 Codex syntax 근거가 아니라 standing trigger → procedure → living task document 분리의 역사적/recipe 사례로만 사용
+
+### 이후 source 추가 기준
+
+새 링크는 다음 중 하나를 만족할 때만 우선 수집한다.
+
+- 기존 taxonomy에 없는 authoring failure
+- 현재 evidence gap을 직접 줄이는 실측 결과
+- 공식 runtime semantics 변경
+- instruction deletion/refactor의 새로운 before/after evidence
 
 
 ## I. 실제 변경 이력 / Instruction Debt 사례

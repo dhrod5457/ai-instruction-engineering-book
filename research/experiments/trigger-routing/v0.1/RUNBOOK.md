@@ -21,6 +21,147 @@ Calibration prompt:
 
 ---
 
+# 1.1 공통 harness preflight
+
+host 실행 전에 아래 두 명령이 통과해야 한다.
+
+```bash
+cd research/experiments/trigger-routing/v0.1
+python3 harness.py validate
+python3 -m unittest -v test_harness.py test_phase_a_runner.py
+```
+
+`validate`는 다음을 확인한다.
+
+- 4개 description variant 존재
+- 각 variant에 feature/bugfix/refactor/review description 존재
+- calibration 20개와 `split.json` calibration이 동일
+- 전체 split ID가 80개이고 중복 없음
+- `split.json`이 고정한 corpus/pilot/variant Git blob SHA와 현재 파일이 동일
+- `results-template.csv` header가 scorer contract와 동일
+
+실험 fixture가 바뀌었는데 blob SHA가 달라지면 기존 결과와 섞지 않는다.
+
+# 1.2 Materialize
+
+`harness.py materialize`는 네 Skill의 body를 완전히 동일하게 유지하고 description만 선택한 variant로 바꾼다.
+
+예:
+
+```bash
+python3 harness.py materialize \
+  --variant A2_boundary_aware \
+  --host claude \
+  --output /tmp/trigger-routing-a2-claude
+```
+
+기본 project Skill root:
+
+| Host | Path |
+| --- | --- |
+| generic | `.agents/skills` |
+| Claude Code | `.claude/skills` |
+| Codex | `.codex/skills` |
+| Cursor | `.cursor/skills` |
+| Gemini CLI | `.gemini/skills` |
+| GitHub Copilot CLI | `.github/skills` |
+
+실행 시점의 host 문서가 다른 경로를 요구하면:
+
+```bash
+--skills-dir <relative/path>
+```
+
+로 override하고 결과 notes에 그 경로를 기록한다.
+
+# 1.3 Score
+
+20-case 1회 calibration 결과를 `results-template.csv` schema로 저장한다.
+
+```bash
+python3 harness.py score \
+  --results results.csv \
+  --json-out score.json \
+  --md-out score.md
+```
+
+현재 scorer가 계산하는 항목:
+
+- observable rate
+- observable run 기준 accuracy
+- macro-F1
+- none abstention accuracy
+- none false-positive rate
+- routing-pair collision error rate
+- 반복 실행 시 run consistency
+- confusion matrix
+- label별 precision/recall/F1
+
+observable하지 않은 run을 억지로 실패나 none으로 바꾸지 않는다.
+
+---
+
+# 1.4 Phase A runner
+
+Claude Code, Codex, Gemini CLI는 공통 runner로 calibration을 실행할 수 있다.
+
+먼저 설치/버전만 확인한다.
+
+```bash
+python3 phase_a_runner.py --host claude --out /tmp/phase-a-claude --preflight-only
+python3 phase_a_runner.py --host codex --out /tmp/phase-a-codex --preflight-only
+python3 phase_a_runner.py --host gemini --out /tmp/phase-a-gemini --preflight-only
+```
+
+한 host에서 4개 variant × 20 calibration case를 1회 실행:
+
+```bash
+python3 phase_a_runner.py \
+  --host claude \
+  --model <exact-model-id> \
+  --runs 1 \
+  --out runs/claude-calibration
+```
+
+smoke case만 먼저 실행하려면 `--case`를 반복한다.
+
+```bash
+python3 phase_a_runner.py \
+  --host gemini \
+  --model <exact-model-id> \
+  --variant A1_concise \
+  --case EP-F01 \
+  --case EP-B01 \
+  --case NO-04 \
+  --runs 1 \
+  --out runs/gemini-smoke
+```
+
+runner는 각 prompt마다 별도 workspace를 materialize하고 새 CLI process를 시작한다.
+
+안전 경계:
+
+- 실제 사용자 repository를 실험 대상으로 사용하지 않음
+- synthetic 빈 git workspace만 사용
+- Claude는 `--permission-mode plan`
+- Gemini는 `--approval-mode plan`
+- Codex는 `--full-auto`를 사용하지 않음
+- Skill body 자체도 파일 수정/명령 실행을 금지
+- stdout/stderr/command/result row를 raw artifact로 보존
+
+관측 규칙:
+
+- Gemini: `activate_skill(name)` event 우선
+- 공통 fallback: 정확한 `SKILL_ACTIVATED:<name>` sentinel
+- Claude/Codex에서 sentinel도 native event도 없으면 `unobservable`
+- Gemini는 정상 종료된 complete stream에 `activate_skill`이 없으면 `none`을 관측 가능 상태로 기록
+
+`--model`에는 가능하면 alias가 아니라 정확한 model ID를 사용한다.
+
+현재 runner는 host CLI 인증을 설정하거나 설치하지 않는다. 사용자의 기존 로그인/credential을 그대로 사용한다.
+
+---
+
 # 2. Routing-only Skill Body
 
 이 실험은 Skill이 선택된 뒤 실제 코딩 성능을 측정하지 않는다.

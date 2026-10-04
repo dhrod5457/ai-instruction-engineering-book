@@ -1,0 +1,32 @@
+name: Trigger Routing Harness
+
+on:
+  pull_request:
+    paths:
+      - "research/experiments/trigger-routing/v0.1/**"
+      - "research/instruction-files/18-trigger-eval-corpus.md"
+  push:
+    branches:
+      - "main"
+    paths:
+      - "research/experiments/trigger-routing/v0.1/**"
+      - "research/instruction-files/18-trigger-eval-corpus.md"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate frozen fixture
+        working-directory: research/experiments/trigger-routing/v0.1
+        run: python3 harness.py validate
+      - name: Run harness tests
+        working-directory: research/experiments/trigger-routing/v0.1
+        run: python3 -m unittest -v test_harness.py test_phase_a_runner.py

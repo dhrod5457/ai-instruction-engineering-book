@@ -1,0 +1,7 @@
+experiment_version,date,host,host_version,model,variant,task_id,task_class,run_index,agent_exit_code,latency_ms,passed,changed_file_count,out_of_scope_count,missing_validation_count,forbidden_validation_count,invariant_failure_count,assertion_failure_count,fixture_instruction_bytes,raw_dir,notes
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,S0_monolithic_root,B-01,backend,1,0,24219,true,1,0,0,0,0,0,2202,phase-b/codex-smoke-v3/runs/S0_monolithic_root__B-01__r01/raw,
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,S0_monolithic_root,F-01,frontend,1,0,50377,true,1,0,0,0,0,0,2202,phase-b/codex-smoke-v3/runs/S0_monolithic_root__F-01__r01/raw,
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,S0_monolithic_root,DOC-01,docs,1,0,29681,true,1,0,0,0,0,0,2202,phase-b/codex-smoke-v3/runs/S0_monolithic_root__DOC-01__r01/raw,
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,S1_nested_agents,B-01,backend,1,0,25203,true,1,0,0,0,0,0,2404,phase-b/codex-smoke-v3/runs/S1_nested_agents__B-01__r01/raw,
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,S1_nested_agents,F-01,frontend,1,0,37738,true,1,0,0,0,0,0,2404,phase-b/codex-smoke-v3/runs/S1_nested_agents__F-01__r01/raw,
+0.1,2026-10-03,codex,codex-cli 0.160.0,gpt-6.1-sol,S1_nested_agents,DOC-01,docs,1,0,32143,true,1,0,0,0,0,0,2404,phase-b/codex-smoke-v3/runs/S1_nested_agents__DOC-01__r01/raw,

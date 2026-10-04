@@ -453,3 +453,110 @@ skillhub 사례는 강하지만 특정 repository/model의 결과다.
 4. validator spec을 실제 예제 config + expected diagnostics fixture로 보강
 
 실측이 재개되기 전까지는 위 네 작업의 가치가 추가 corpus 수집보다 높다.
+
+
+## 2026-10-03 제품별 문서 조사 공백 재분류
+
+다음 항목은 더 이상 "추가 링크 수집" 공백으로 보지 않는다.
+
+- Claude Code prompt-audit: built-in `/doctor prompt-audit` / `/checkup prompt-audit`와 `/claude-api prompt-audit` 상세 조사 완료
+- Cursor Rule validation: 공식 structural contract와 runtime visibility 확인, 공식 standalone CI validator는 현재 문서에서 확인하지 못함
+- Codex skill-creator: `openai/skills`와 `openai/codex` 공식 source 차이까지 조사
+- Gemini Skill best practices: discovery/precedence/silent-skip/validation helper까지 조사
+- GitHub Copilot path-specific precedence: GitHub.com/IDE와 CLI의 merge/precedence semantics 차이 확인
+- nested AGENTS 및 공개 repository corpus: 기존 16/21/27번 자료로 충분히 보강됨
+
+상세:
+
+- [31-product-edge-source-deep-dive.md](31-product-edge-source-deep-dive.md)
+
+따라서 현재 큰 gap은 제품 문서 수집이 아니라 **controlled experiment**다.
+
+우선순위는 기존과 동일하게 유지한다.
+
+1. cross-host routing
+2. root monolith vs scoped instruction
+3. description boundary
+4. model-upgrade instruction diet
+5. reference depth
+6. prose vs Hook enforcement
+
+새 링크가 생겨도 위 실측 공백을 직접 줄이지 않으면 corpus 확장 우선순위를 낮춘다.
+
+
+## 2026-10-03 Link-only source 전수 감사
+
+01~31 연구 문서와 README의 URL을 다시 확인했다.
+
+결론:
+
+- 핵심 공식/학술/실제 저장소 source는 별도 분석 또는 후속 synthesis가 존재한다.
+- public corpus의 raw URL 목록은 provenance index이며 12/16/27번 문서에서 후속 분석됐다.
+- OpenAI PLANS.md는 현재 Archived이므로 current syntax evidence가 아니라 historical pattern으로 하향했다.
+- current Codex AGENTS hierarchy, Gemini extension surface, Copilot Code Review semantics를 추가 보강했다.
+- 상세: [32-link-only-source-audit.md](32-link-only-source-audit.md)
+
+따라서 **source-depth 자체는 더 이상 주요 evidence gap이 아니다.**
+
+남은 큰 gap은 controlled experiment다.
+
+
+## 2026-10-03 Controlled experiment 구현 진행
+
+source collection 이후 실제 experiment harness 구현으로 전환했다.
+
+### Experiment A — Skill description routing
+
+상태:
+
+- fixture frozen
+- host-neutral validator/scorer 구현
+- Claude Code/Codex/Gemini Phase A runner 구현
+- GitHub Actions gate PASS
+- 실제 host smoke는 아직 미실행
+
+### Experiment B — Root monolith vs nested scope
+
+우선 S0/S1만 구현했다.
+
+- S0: monolithic root AGENTS.md
+- S1: root global + nested subsystem AGENTS.md
+- 동일 workload SHA 자동 검증
+- 12개 독립 calibration task
+- deterministic grader
+- Claude Code/Codex Phase B runner
+- GitHub Actions gate PASS
+
+의도적으로 아직 추가하지 않음:
+
+- S2 path-scoped vendor rules
+- S3 procedure-as-Skill
+
+이 둘은 S0/S1 실제 calibration으로 fixture와 grader가 안정된 뒤 확장한다.
+
+### 현재 evidence gap 상태
+
+문서/링크 공백보다 다음 실제 run이 우선이다.
+
+1. Claude Code routing smoke
+2. Codex routing smoke
+3. Gemini routing smoke
+4. Claude Code S0/S1 scope smoke
+5. Codex S0/S1 scope smoke
+6. adapter가 안정되면 calibration 전체 실행
+
+실제 host/model/version이 기록되지 않은 harness-only 결과를 책의 효과 수치로 사용하지 않는다.
+
+
+## 2026-10-03 실제 host smoke 시작
+
+로컬 환경의 Claude/Codex/Gemini에서 소규모 실행을 시작했다.
+
+- Claude/Codex: feature·bugfix sentinel 확인. none은 아직 unobservable이다.
+- Scope: sandbox CWD와 검증 기록 정리 때문에 발생한 오류를 수정하고 S0/S1 smoke를 재실행했다.
+- Gemini: CLI option mismatch 수정 후 UNSUPPORTED_CLIENT 인증 거부를 확인했다.
+- 모든 시도는 관측/fixture 검증이며 효과 크기 또는 full calibration 결과가 아니다.
+- source/adapter가 바뀐 이전 smoke는 calibration에서 제외한다.
+- 상세 결과: [SMOKE-REPORT-2026-10-03.md](../experiments/SMOKE-REPORT-2026-10-03.md).
+
+다음 우선순위: none 관측 정책 확정, 깨끗한 host 환경에서 scope 전체 calibration, Gemini 지원 클라이언트/인증 경로 확인.

@@ -1,0 +1,32 @@
+name: Scope Placement Harness
+
+on:
+  pull_request:
+    paths:
+      - "research/experiments/scope-placement/v0.1/**"
+      - "research/instruction-files/19-scope-eval-fixture.md"
+  push:
+    branches:
+      - "main"
+    paths:
+      - "research/experiments/scope-placement/v0.1/**"
+      - "research/instruction-files/19-scope-eval-fixture.md"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate scope fixture
+        working-directory: research/experiments/scope-placement/v0.1
+        run: python3 scope_harness.py validate
+      - name: Run scope harness tests
+        working-directory: research/experiments/scope-placement/v0.1
+        run: python3 -m unittest -v test_scope_harness.py test_phase_b_runner.py

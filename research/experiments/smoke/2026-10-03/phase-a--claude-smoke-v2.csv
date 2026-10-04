@@ -1,0 +1,4 @@
+experiment_version,date,host,host_version,model,model_version,variant,prompt_id,run_index,expected,actual,observable,routing_evidence,metadata_tokens,input_tokens,output_tokens,latency_ms,skill_body_loaded,notes
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,,A1_concise,EP-F01,1,feature,feature,true,sentinel:feature,,,,12852,true,
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,,A1_concise,EP-B01,1,bugfix,bugfix,true,sentinel:bugfix,,,,16136,true,
+0.1,2026-10-03,claude,2.1.287 (Claude Code),claude-sonnet-4-6,,A1_concise,NO-04,1,none,unobservable,false,no-reliable-activation-evidence,,,,3671,false,

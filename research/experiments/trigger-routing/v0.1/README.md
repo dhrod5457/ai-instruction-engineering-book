@@ -19,6 +19,12 @@
 
 - `variants.json`: A0 Broad, A1 Concise, A1L Length-Control, A2 Boundary-Aware의 정확한 description
 - `pilot-cases.json`: 20개 calibration prompt
+- `harness.py`: fixture validation, host별 Skill materialize, 결과 score
+- `phase_a_runner.py`: Claude Code/Codex/Gemini CLI Phase A fresh-process 실행 및 raw trace 수집
+- `PHASE-A-STATUS.md`: 현재 실행 상태, smoke 기준, host 실측 전제
+- `test_harness.py`: harness 표준 라이브러리 기반 회귀 테스트
+- `results-template.csv`: 수집 결과 schema
+- `split.json`: calibration/development/frozen confirmatory split
 - full corpus 원본: `../../../instruction-files/18-trigger-eval-corpus.md`
 
 ## 실험 단위
@@ -57,9 +63,47 @@ manual-only는 공통 variant에서 제외한다.
 
 따라서 A3는 **host adapter별 control experiment**로 따로 만든다.
 
+## Harness preflight
+
+외부 host를 실행하기 전에 먼저 fixture 자체를 검증한다.
+
+```bash
+cd research/experiments/trigger-routing/v0.1
+python3 harness.py validate
+python3 -m unittest -v test_harness.py test_phase_a_runner.py
+```
+
+variant를 host별 project Skill 위치에 materialize할 수 있다.
+
+```bash
+python3 harness.py materialize --variant A1_concise --host claude --output /tmp/route-claude
+python3 harness.py materialize --variant A1_concise --host codex --output /tmp/route-codex
+python3 harness.py materialize --variant A1_concise --host gemini --output /tmp/route-gemini
+```
+
+기본 경로는 기준일 현재 문서에 맞춘다.
+
+- generic: `.agents/skills`
+- Claude Code: `.claude/skills`
+- Codex: `.codex/skills`
+- Cursor: `.cursor/skills`
+- Gemini CLI: `.gemini/skills`
+- Copilot CLI: `.github/skills`
+
+제품 문법이 바뀌었거나 다른 호환 경로를 시험하려면 `--skills-dir`로 명시적으로 override한다.
+
+수집한 CSV는 다음처럼 score한다.
+
+```bash
+python3 harness.py score --results results.csv --json-out score.json --md-out score.md
+```
+
+scorer는 observable run만 routing accuracy/F1 계산에 사용하고, observable rate는 별도로 보고한다.
+
 ## 1차 실행 권장 순서
 
-1. A0/A1/A1L/A2 각각 20개 prompt를 1회 실행
+1. `harness.py validate`와 `test_harness.py` 통과
+2. A0/A1/A1L/A2 각각 20개 prompt를 1회 실행
 2. routing trace가 정상 수집되는지 확인
 3. case label/harness 오류가 있으면 수정
 4. 수정 후 pilot version을 올리고 처음부터 재실행

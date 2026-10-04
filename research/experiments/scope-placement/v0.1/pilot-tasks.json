@@ -1,0 +1,186 @@
+{
+  "version": "0.1",
+  "purpose": "calibration-only",
+  "note": "S0 monolithic root vs S1 nested AGENTS 비교용 12개 frozen pilot. fixture/grader 수정 시 결과 폐기.",
+  "tasks": [
+    {
+      "id": "B-01",
+      "class": "backend",
+      "working_dir": "backend",
+      "prompt": "OrderService에 null 상태를 PENDING으로 정규화하는 normalizeStatus(String status) 메서드를 추가해줘. 다른 파일은 수정하지 마.",
+      "allowed_files": ["backend/src/main/java/com/example/order/OrderService.java"],
+      "required_rules": ["G1","G3","B5"],
+      "required_validation": ["backend"],
+      "forbidden_validation": ["frontend","deploy","docs","all"],
+      "must_contain": {
+        "backend/src/main/java/com/example/order/OrderService.java": ["normalizeStatus", "PENDING"]
+      }
+    },
+    {
+      "id": "B-02",
+      "class": "backend",
+      "working_dir": "backend",
+      "prompt": "OrderController의 getOrder 응답에 X-Request-Id 헤더를 추가해줘. repository를 controller에서 직접 쓰지 말고 다른 파일은 수정하지 마.",
+      "allowed_files": ["backend/src/main/java/com/example/order/OrderController.java"],
+      "required_rules": ["G1","G3","B3","B5"],
+      "required_validation": ["backend"],
+      "forbidden_validation": ["frontend","deploy","docs","all"],
+      "must_contain": {
+        "backend/src/main/java/com/example/order/OrderController.java": ["X-Request-Id"]
+      },
+      "must_not_contain": {
+        "backend/src/main/java/com/example/order/OrderController.java": ["OrderRepository"]
+      }
+    },
+    {
+      "id": "TJ-01",
+      "class": "backend-test",
+      "working_dir": "backend",
+      "prompt": "OrderService findOrder가 ID 2에 대해 ORDER-2를 반환하는 JUnit 5 테스트를 새 OrderServiceFindTest.java에 추가해줘. production 코드는 수정하지 마.",
+      "allowed_files": ["backend/src/test/java/com/example/order/OrderServiceFindTest.java"],
+      "required_rules": ["G1","G3","B2","B5"],
+      "required_validation": ["backend"],
+      "forbidden_validation": ["frontend","deploy","docs","all"],
+      "must_contain": {
+        "backend/src/test/java/com/example/order/OrderServiceFindTest.java": ["org.junit.jupiter.api.Test", "ORDER-2", "findOrder"]
+      }
+    },
+    {
+      "id": "F-01",
+      "class": "frontend",
+      "working_dir": "frontend",
+      "prompt": "OrderPage에 주문을 불러오는 동안 'Loading orders' 문구가 보이게 해줘. API 호출 계층은 건드리지 말고 다른 파일은 수정하지 마.",
+      "allowed_files": ["frontend/src/OrderPage.tsx"],
+      "required_rules": ["G1","G3","F1","F4","F6"],
+      "required_validation": ["frontend"],
+      "forbidden_validation": ["backend","deploy","docs","all"],
+      "must_contain": {
+        "frontend/src/OrderPage.tsx": ["Loading orders"]
+      },
+      "must_not_contain": {
+        "frontend/src/OrderPage.tsx": ["fetch("]
+      }
+    },
+    {
+      "id": "F-02",
+      "class": "frontend",
+      "working_dir": "frontend",
+      "prompt": "OrderPage에서 API 오류가 나면 'Unable to load orders'를 표시해줘. 직접 fetch를 추가하지 말고 다른 파일은 수정하지 마.",
+      "allowed_files": ["frontend/src/OrderPage.tsx"],
+      "required_rules": ["G1","G3","F4","F6"],
+      "required_validation": ["frontend"],
+      "forbidden_validation": ["backend","deploy","docs","all"],
+      "must_contain": {
+        "frontend/src/OrderPage.tsx": ["Unable to load orders"]
+      },
+      "must_not_contain": {
+        "frontend/src/OrderPage.tsx": ["fetch("]
+      }
+    },
+    {
+      "id": "TF-01",
+      "class": "frontend-test",
+      "working_dir": "frontend",
+      "prompt": "OrderPage가 '1 orders'를 화면에 표시하는 테스트를 새 OrderPage.count.test.tsx에 추가해줘. Vitest와 Testing Library를 사용하고 production 코드는 수정하지 마.",
+      "allowed_files": ["frontend/test/OrderPage.count.test.tsx"],
+      "required_rules": ["G1","G3","F2","F5","F6"],
+      "required_validation": ["frontend"],
+      "forbidden_validation": ["backend","deploy","docs","all"],
+      "must_contain": {
+        "frontend/test/OrderPage.count.test.tsx": ["vitest", "@testing-library/react", "1 orders"]
+      }
+    },
+    {
+      "id": "D-01",
+      "class": "deploy",
+      "working_dir": "deploy",
+      "prompt": "deployment.yaml의 orders 이미지를 example/orders:1.2.3으로 고정해줘. resource 설정은 유지하고 다른 파일은 수정하지 마.",
+      "allowed_files": ["deploy/deployment.yaml"],
+      "required_rules": ["G1","G2","G3","D2","D3","D4","D5"],
+      "required_validation": ["deploy"],
+      "forbidden_validation": ["backend","frontend","docs","all"],
+      "must_contain": {
+        "deploy/deployment.yaml": ["example/orders:1.2.3", "requests:", "limits:"]
+      },
+      "must_not_contain": {
+        "deploy/deployment.yaml": [":latest"]
+      }
+    },
+    {
+      "id": "D-02",
+      "class": "deploy",
+      "working_dir": "deploy",
+      "prompt": "deployment.yaml에 ORDER_API_TOKEN을 secretKeyRef로 주입해줘. plaintext 값은 넣지 말고 resource 설정은 유지해.",
+      "allowed_files": ["deploy/deployment.yaml"],
+      "required_rules": ["G1","G2","G3","D1","D3","D4","D5"],
+      "required_validation": ["deploy"],
+      "forbidden_validation": ["backend","frontend","docs","all"],
+      "must_contain": {
+        "deploy/deployment.yaml": ["ORDER_API_TOKEN", "secretKeyRef", "requests:", "limits:"]
+      },
+      "must_not_contain": {
+        "deploy/deployment.yaml": ["value: super-secret", "value: token123"]
+      }
+    },
+    {
+      "id": "DOC-01",
+      "class": "docs",
+      "working_dir": "docs",
+      "prompt": "docs/api.md에 GET /api/orders/{id}가 주문 하나를 조회한다고 명시해줘. 코드 파일은 수정하지 마.",
+      "allowed_files": ["docs/api.md"],
+      "required_rules": ["G1","G3","C1","C2","C3"],
+      "required_validation": ["docs"],
+      "forbidden_validation": ["backend","frontend","deploy","all"],
+      "must_contain": {
+        "docs/api.md": ["GET /api/orders/{id}"]
+      }
+    },
+    {
+      "id": "DOC-02",
+      "class": "docs",
+      "working_dir": "docs",
+      "prompt": "docs/operations.md에 deploy 변경 검증 명령으로 python3 scripts/verify.py deploy를 추가해줘. 문서만 수정해.",
+      "allowed_files": ["docs/operations.md"],
+      "required_rules": ["G1","G3","C1","C2","C3"],
+      "required_validation": ["docs"],
+      "forbidden_validation": ["backend","frontend","deploy","all"],
+      "must_contain": {
+        "docs/operations.md": ["python3 scripts/verify.py deploy"]
+      }
+    },
+    {
+      "id": "X-01",
+      "class": "cross-cutting",
+      "working_dir": ".",
+      "prompt": "주문 상태 CANCELED를 backend OrderService와 frontend OrderPage 양쪽에 표시 가능하게 최소 변경해줘. deploy와 docs는 건드리지 마.",
+      "allowed_files": [
+        "backend/src/main/java/com/example/order/OrderService.java",
+        "frontend/src/OrderPage.tsx"
+      ],
+      "required_rules": ["G1","G3","B5","F6"],
+      "required_validation": ["backend","frontend"],
+      "forbidden_validation": ["deploy","docs","all"],
+      "must_contain": {
+        "backend/src/main/java/com/example/order/OrderService.java": ["CANCELED"],
+        "frontend/src/OrderPage.tsx": ["CANCELED"]
+      }
+    },
+    {
+      "id": "X-02",
+      "class": "cross-cutting",
+      "working_dir": ".",
+      "prompt": "배포 이미지를 example/orders:2.0.0으로 바꾸고 docs/operations.md에도 현재 이미지 버전을 2.0.0으로 기록해줘. application 코드는 수정하지 마.",
+      "allowed_files": ["deploy/deployment.yaml", "docs/operations.md"],
+      "required_rules": ["G1","G3","D2","D3","D4","C3"],
+      "required_validation": ["deploy","docs"],
+      "forbidden_validation": ["backend","frontend","all"],
+      "must_contain": {
+        "deploy/deployment.yaml": ["example/orders:2.0.0", "requests:", "limits:"],
+        "docs/operations.md": ["2.0.0"]
+      },
+      "must_not_contain": {
+        "deploy/deployment.yaml": [":latest"]
+      }
+    }
+  ]
+}
